@@ -55,4 +55,6 @@ router.post ('/save', async function(req,res){
   res.redirect("/");
 });
 
+//for edit, book to be edited should also be sent 
+
 module.exports = router;
