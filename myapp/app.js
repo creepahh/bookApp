@@ -1,4 +1,4 @@
-var createError = require('http-errors');  
+var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
@@ -9,18 +9,9 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-var mongoose = require("mongoose");
-
-//db connection
-mongoose.connect('mongodb+srv://creepahh13:RvknJWl0l5H8bELW@cluster0.ir5kr.mongodb.net/test')   
-  .then(() => console.log('Connected!'))
-  .catch((e) => console.log(e));
-  
-
-
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));          //look at the templates of frontend here 
-app.set('view engine', 'ejs');          //pug, zed views can be used like ejs
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(express.json());
