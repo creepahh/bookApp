@@ -55,6 +55,35 @@ router.post ('/save', async function(req,res){
   res.redirect("/");
 });
 
+router.get('/edit/:id', async function (req, res) {
+  try {
+    const book = await (book.findById(req.params.id))
+    if (!book) {
+      redirect("/");
+    }
+    res.render("editbooks", {
+      title: "edit book",
+      book: books,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  res.redirect("/");
+});
 //for edit, book to be edited should also be sent 
+
+router.delete('/remove/:id', async function (req, res) {
+  try {
+    const bookId = req.params.id;
+
+    await Book.findByIdAndDelete(bookId);
+
+    res.redirect("/");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error deleting book");            //internal server error
+  }
+});
+
 
 module.exports = router;

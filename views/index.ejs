@@ -18,6 +18,8 @@
           <h5 class="card-title"><%= book.bookName %></h5>
           <p class="card-text"><%= book.bookDescription %></p>
           <a href="#" class="btn btn-primary"><%= book.author %></a>
+          <a href="/edit/<% book._id %>" class="card-link">Edit</a>
+          <a href="/remove/<% book._id %>" class="card-link">Delete</a>
         </div>
       </div>       
       
