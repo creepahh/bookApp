@@ -55,35 +55,57 @@ router.post ('/save', async function(req,res){
   res.redirect("/");
 });
 
-router.get('/edit/:id', async function (req, res) {
-  try {
-    const book = await (book.findById(req.params.id))
-    if (!book) {
-      redirect("/");
-    }
-    res.render("editbooks", {
-      title: "edit book",
-      book: books,
-    });
-  } catch (error) {
-    console.log(error);
-  }
-  res.redirect("/");
-});
-//for edit, book to be edited should also be sent 
+// router.get('/edit/:id', async function (req, res) {
+//   try {
+//     const book = await book.findByIdAndUpdate(req.params.id, updatedBook);
+//     if (!book) {
+//       res.redirect("/");
+//     }
+//     res.render("editbooks", {
+//       title: "edit book",
+//       book: book,
+//     });
+//   } catch (error) {
+//     console.log(error);
+//   }
+//   res.redirect("/");
+// });
 
-router.delete('/remove/:id', async function (req, res) {
+router.post('/update/:id', async function(req, res, next) {
   try {
     const bookId = req.params.id;
+    const updatedData = req.body; // Get the updated data from the form
 
-    await Book.findByIdAndDelete(bookId);
+    console.log('Updating the book with ID:', bookId);
 
+    await Book.findByIdAndUpdate(bookId, updatedData, { new: true });
+    
+    
     res.redirect("/");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error deleting book");            //internal server error
+    
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Error updating book.");
   }
 });
+
+
+//for edit, book to be edited should also be sent 
+
+router.post('/delete/:id',async function(req, res, next) {
+  try{
+    const bookId = req.params.id;
+    
+    console.log('Deleting the book with ID:', bookId); 
+    
+   await Book.findByIdAndDelete(new ObjectId(bookId));
+   res.redirect("/");
+  }catch(err){
+   console.log(err); 
+   res.status(500).send("Error deleting book.");   //internal server error
+  }
+});
+
 
 
 module.exports = router;
