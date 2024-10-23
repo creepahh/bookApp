@@ -55,21 +55,22 @@ router.post ('/save', async function(req,res){
   res.redirect("/");
 });
 
-// router.get('/edit/:id', async function (req, res) {
-//   try {
-//     const book = await book.findByIdAndUpdate(req.params.id, updatedBook);
-//     if (!book) {
-//       res.redirect("/");
-//     }
-//     res.render("editbooks", {
-//       title: "edit book",
-//       book: book,
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-//   res.redirect("/");
-// });
+router.get('/edit/:id', async function (req, res) {
+  try {
+    const book = await book.findById(req.params.id);
+    if (!book) {
+      res.redirect("/");
+
+    }
+    res.render("edit-book", {
+      title: "edit book",
+      book: book,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  // res.redirect("/");
+});
 
 router.post('/update/:id', async function(req, res, next) {
   try {
