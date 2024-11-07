@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var createError = require('http-errors');  
 var express = require('express');
 var path = require('path');
@@ -12,11 +14,20 @@ var app = express();
 var mongoose = require("mongoose");
 
 //db connection
-mongoose.connect('mongodb+srv://creepahh13:RvknJWl0l5H8bELW@cluster0.ir5kr.mongodb.net/test')   
-  .then(() => console.log('Connected!'))
-  .catch((e) => console.log(e));
+// mongoose.connect('mongodb+srv://username:password@cluster0.ir5kr.mongodb.net/test')   
+//   .then(() => console.log('Connected!'))
+//   .catch((e) => console.log(e));
   
+const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
+mongoose.connect(dbURI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+}).then(() => {
+    console.log("Connected to MongoDB!");
+}).catch((err) => {
+    console.error("MongoDB connection error:", err);
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));          //look at the templates of frontend here 
@@ -45,6 +56,14 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+const { isLoggedIn } = require('./routes/auth');  // Import the middleware
+
+// Use `isLoggedIn` to protect routes
+app.get('/books', isLoggedIn, (req, res) => {
+    // Only logged-in users can access the books route
+    res.render('books');
 });
 
 module.exports = app;
