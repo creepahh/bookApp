@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
+const passport = require('passport');
+const User = require('../models/user');
 
 // Register 
 router.post('/register', async (req, res) => {
@@ -16,8 +17,11 @@ router.post('/register', async (req, res) => {
 // Login 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/books',
-    failureRedirect: '/login'
+    failureRedirect: '/login',
+    failureFlash: true
 }));
+
+
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) return next();
