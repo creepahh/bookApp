@@ -19,16 +19,21 @@ var mongoose = require("mongoose");
 //   .then(() => console.log('Connected!'))
 //   .catch((e) => console.log(e));
   
-const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+// const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
-mongoose.connect(dbURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-}).then(() => {
-    console.log("Connected to MongoDB!");
-}).catch((err) => {
-    console.error("MongoDB connection error:", err);
-});
+// mongoose.connect(dbURI, {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+// }).then(() => {
+//     console.log("Connected to MongoDB!");
+// }).catch((err) => {
+//     console.error("MongoDB connection error:", err);
+// });
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => console.log('Connected!'))
+  .catch(err => console.error('Connection error:', err));
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));          //look at the templates of frontend here 
