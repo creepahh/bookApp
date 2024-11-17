@@ -30,7 +30,7 @@ var mongoose = require("mongoose");
 //     console.error("MongoDB connection error:", err);
 // });
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect("mongodb://127.0.0.1:27017/test")
   .then(() => console.log('Connected!'))
   .catch(err => console.error('Connection error:', err));
 
@@ -70,9 +70,11 @@ app.use(function(err, req, res, next) {
 const { isLoggedIn } = require('./routes/auth');  // Import the middleware
 
 // Use `isLoggedIn` to protect routes
-app.get('/books', isLoggedIn, (req, res) => {
+app.get('/books', (req, res) => {
     // Only logged-in users can access the books route
     res.render('books');
 });
+
+app.listen(3000)
 
 module.exports = app;
