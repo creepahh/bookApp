@@ -74,7 +74,54 @@ app.get('/books', (req, res) => {
     // Only logged-in users can access the books route
     res.render('books');
 });
+app.get('/', (req, res) => {
+  res.redirect('/login');
+});
+app.get('/login', (req, res) => {
+  res.render('login', { title: 'Login' });
+});
 
-app.listen(3000)
+app.get('/register', (req, res) => {
+  res.render('register', { title: 'Register' });
+});
+
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+      const user = await User.findOne({ username, password });
+      if (user) {
+          req.session.user = user.username;
+          res.redirect('/dashboard');
+      } else {
+          res.redirect('/login');
+      }
+  } catch (error) {
+      console.error(error);
+      res.redirect('/login');
+  }
+});
+
+
+app.post('/register', async (req, res) => {
+  const { username, email, password } = req.body;
+  try {
+      const newUser = new User({ username, email, password });
+      await newUser.save();
+      res.redirect('/login');
+  } catch (error) {
+      console.error(error);
+      res.redirect('/register');
+  }
+});
+
+
+app.get('/dashboard', (req, res) => {
+  if (!req.session.user) {
+      return res.redirect('/login');
+  }
+  res.render('dashboard', { title: 'Dashboard', user: req.session.user });
+}); 
+
+app.listen(3001)
 
 module.exports = app;
